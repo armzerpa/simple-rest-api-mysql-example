@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"github.com/armzerpa/simple-rest-api-mysql-example/cmd"
+	"github.com/armzerpa/simple-rest-api-mysql-example/cmd/config"
+)
 
 func main() {
-	fmt.Println("hey armando")
+	config := config.GetConfig()
+
+	app := &cmd.App{}
+	app.Initialize(config)
 }
