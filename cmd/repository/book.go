@@ -16,6 +16,8 @@ var books = []model.Book{
 type Repo interface {
 	GetAll() []model.Book
 	GetById(id string) *model.Book
+	DeleteById(id string) bool
+	Create(book model.Book) *model.Book
 }
 
 type BookRepo struct {
@@ -60,7 +62,27 @@ func (b BookRepo) GetById(id string) *model.Book {
 	err := b.DbConnection.QueryRow("SELECT * FROM book WHERE ID = ?", id).Scan(&book.ID, &book.Title, &book.Author, &book.Quantity)
 
 	if err != nil {
-		log.Println("Error in the query to the database ", err)
+		log.Println("Error in SELECT to the database ", err)
+		return nil
+	}
+	return &book
+}
+
+func (b BookRepo) DeleteById(id string) bool {
+	err := b.DbConnection.QueryRow("DELETE FROM book WHERE ID = ?", id)
+
+	if err != nil {
+		log.Println("Error in the DELETE to the database ", err)
+		return false
+	}
+	return true
+}
+
+func (b BookRepo) Create(book model.Book) *model.Book {
+	err := b.DbConnection.QueryRow("INSERT INTO book (ID, Title, Author, Quantity) values (?,?,?,?)").Scan(&book.ID, &book.Title, &book.Author, &book.Quantity)
+
+	if err != nil {
+		log.Println("Error in INSERT to the database ", err)
 		return nil
 	}
 	return &book
