@@ -2,8 +2,10 @@ package handler
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 
+	"github.com/armzerpa/simple-rest-api-mysql-example/cmd/api/model"
 	"github.com/armzerpa/simple-rest-api-mysql-example/cmd/repository"
 	"github.com/gin-gonic/gin"
 )
@@ -30,13 +32,19 @@ func (h *HandlerBook) GetBookById(c *gin.Context) {
 }
 
 func (h *HandlerBook) DeleteBookById(c *gin.Context) {
-	//TODO: implement method
-	//id := c.Param("id")
-	//result := h.bookRepository.DeleteById(id)
-	c.IndentedJSON(http.StatusOK, "Book deleted")
+	id := c.Param("id")
+	result := h.bookRepository.DeleteById(id)
+	c.IndentedJSON(http.StatusOK, "Book deleted: "+fmt.Sprintf("%t", result))
 }
 
 func (h *HandlerBook) CreateBook(c *gin.Context) {
-	//TODO: implement method
-	c.IndentedJSON(http.StatusCreated, "Book created")
+	var bookToInsert model.Book
+	error := c.BindJSON(&bookToInsert)
+	if error != nil {
+		c.IndentedJSON(http.StatusBadRequest, "Invalid body")
+		return
+	}
+
+	book := h.bookRepository.Create(bookToInsert)
+	c.IndentedJSON(http.StatusCreated, book)
 }
