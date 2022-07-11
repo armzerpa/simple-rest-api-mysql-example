@@ -28,3 +28,15 @@ func (h *HandlerBook) GetBookById(c *gin.Context) {
 	book := h.bookRepository.GetById(id)
 	c.IndentedJSON(http.StatusOK, &book)
 }
+
+func (h *HandlerBook) DeleteBookById(c *gin.Context) {
+	//TODO: implement method
+	//id := c.Param("id")
+	//result := h.bookRepository.DeleteById(id)
+	c.IndentedJSON(http.StatusOK, "Book deleted")
+}
+
+func (h *HandlerBook) CreateBook(c *gin.Context) {
+	//TODO: implement method
+	c.IndentedJSON(http.StatusCreated, "Book created")
+}

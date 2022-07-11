@@ -36,6 +36,8 @@ func (a *App) initRouter(config *config.RouteConfig, handlerBook *handler.Handle
 		version.GET("/ping", handler.Ping)
 		version.GET("/books", handlerBook.GetBooks)
 		version.GET("/books/:id", handlerBook.GetBookById)
+		version.DELETE("/books/:id", handlerBook.DeleteBookById)
+		version.POST("/books", handlerBook.CreateBook)
 	}
 	a.Router.Run(config.Port)
 }
